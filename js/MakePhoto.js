@@ -43,10 +43,10 @@ $(function () {
 	function canvasToImage(){
 		// var image = new Image();
 		// image.src = canvas.toDataURL('image/png');
-		Canvas2Image.saveAsPNG(canvas);
-		// var dom = document.createElement("a");
-		// dom.href = canvas.toDataURL('image/png');
-		// dom.download = 'RX500_pic' + new Date().getTime() + ".png";
-		// dom.click();
+		// Canvas2Image.saveAsPNG(canvas);
+		var dom = document.createElement("a");
+		dom.href = canvas.toDataURL('image/png');
+		dom.download = 'RX500_pic' + new Date().getTime() + ".png";
+		dom.click();
 	}
 });
