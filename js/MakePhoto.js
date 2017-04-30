@@ -45,7 +45,7 @@ $(function () {
 				}
 				if (status == 0){//解决mask和img onload时间不同的问题
 					mask = new Image;
-					//mask.setAttribute('crossOrigin', 'anonymous');// 解决跨域
+					mask.setAttribute('crossOrigin', 'anonymous');// 解决跨域
 					mask.src = "../img/20170429143008.png?v=12";
 					mask.onload = function () {
 						contextUp.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
