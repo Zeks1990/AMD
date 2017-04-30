@@ -55,18 +55,18 @@ $(function () {
 	function drawToCanvas () {
 		context.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
 		context.drawImage(img, drawX, drawY, img.width, img.height);
-		console.log(downX+' '+downY);
-		console.log(moveX+' '+moveY);
-		console.log(drawX+' '+drawY);
+		// console.log(downX+' '+downY);
+		// console.log(moveX+' '+moveY);
+		// console.log(drawX+' '+drawY);
 
 
 		// strDataURL = canvas.toDataURL();// 获取canvas base64数据
 	}
 	//拖动图片逻辑
 	$(canvasUp).on('mousedown', function (e) {
-		downX = e.clientX;
-		downY = e.clientY;
 		if (status > 0) {
+			downX = e.clientX;
+			downY = e.clientY;
 			tempX = drawX;
 			tempY = drawY;
 			$('body').on('mousemove', function (e) {
