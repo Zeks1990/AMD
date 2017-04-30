@@ -28,7 +28,7 @@ $(function () {
 			img = new Image;
 			img.src = this.result
 			mask = new Image;
-			mask.setAttribute('crossOrigin', 'anonymous');// 解决跨域
+			//mask.setAttribute('crossOrigin', 'anonymous');// 解决跨域
 			mask.src = "../img/20170429143008.png?v=12";
 			img.onload = function () {
 				mask.onload = function () {
@@ -59,23 +59,23 @@ $(function () {
 	function drawToCanvas () {
 		context.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
 		context.drawImage(img, drawX, drawY, img.width, img.height);
-		// console.log(downX+' '+downY);
-		// console.log(moveX+' '+moveY);
-		// console.log(drawX+' '+drawY);
+		console.log(downX+' '+downY);
+		console.log(moveX+' '+moveY);
+		console.log(drawX+' '+drawY);
 
 
 		// strDataURL = canvas.toDataURL();// 获取canvas base64数据
 	}
 	//拖动图片逻辑
-	$(canvasUp).on('mousedown', function (e) {
+	$(canvasUp).on('mousedown touchstart', function (e) {
 		if (status > 0) {
-			downX = e.clientX;
-			downY = e.clientY;
+			downX = e.clientX || e.targetTouches[0].clientX;
+			downY = e.clientY || e.targetTouches[0].clientY;
 			tempX = drawX;
 			tempY = drawY;
-			$('body').on('mousemove', function (e) {
-				moveX = e.clientX;
-				moveY = e.clientY;
+			$('body').on('mousemove touchmove', function (e) {
+				moveX = e.clientX || e.targetTouches[0].clientX;
+				moveY = e.clientY || e.targetTouches[0].clientY;
 				/*if (!bool) {
 					if (-(downX - moveX) + tempX <= MAX_WIDTH - img.width) {
 						drawX = MAX_WIDTH - img.width;
@@ -100,8 +100,8 @@ $(function () {
 				drawY = bool == true ? -(downY - moveY) + tempY <= MAX_HEIGHT - img.height ? drawY = MAX_HEIGHT - img.height : -(downY - moveY) + tempY >= 0 ? drawY = 0 : drawY = -(downY - moveY) + tempY : drawY;
 				drawToCanvas();
 			});
-			$('body').one('mouseup', function (e) {
-				$('body').off('mousemove');
+			$('body').one('mouseup touchend', function (e) {
+				$('body').off('mousemove touchmove');
 			});
 		}
 	});
