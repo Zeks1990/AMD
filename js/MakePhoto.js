@@ -32,25 +32,25 @@ $(function () {
 			mask.src = "../img/20170429143008.png?v=12";
 			img.onload = function () {
 				mask.onload = function () {
+					drawX = 0;
+					drawY = 0;
+					tempX = 0;
+					tempY = 0;
+					//自适应画布宽高
+					if (img.height > img.width) {
+						img.height *= MAX_WIDTH / img.width;
+						img.width = MAX_WIDTH;
+						drawY = tempY = (MAX_HEIGHT - img.height) / 2;
+						bool = true;
+					} else {
+						img.width *= MAX_HEIGHT / img.height;
+						img.height = MAX_HEIGHT;
+						drawX = tempX = (MAX_WIDTH - img.width) / 2;
+						bool = false;
+					}
+					drawToCanvas();
 					contextUp.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
 				}
-				drawX = 0;
-				drawY = 0;
-				tempX = 0;
-				tempY = 0;
-				//自适应画布宽高
-				if (img.height > img.width) {
-					img.height *= MAX_WIDTH / img.width;
-					img.width = MAX_WIDTH;
-					drawY = tempY = (MAX_HEIGHT - img.height) / 2;
-					bool = true;
-				} else {
-					img.width *= MAX_HEIGHT / img.height;
-					img.height = MAX_HEIGHT;
-					drawX = tempX = (MAX_WIDTH - img.width) / 2;
-					bool = false;
-				}
-				drawToCanvas();
 			}
 			status++;
 		}
