@@ -31,6 +31,9 @@ $(function () {
 			mask.setAttribute('crossOrigin', 'anonymous');// 解决跨域
 			mask.src = "../img/20170429143008.png?v=12";
 			img.onload = function () {
+				mask.onload = function () {
+					contextUp.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
+				}
 				drawX = 0;
 				drawY = 0;
 				tempX = 0;
@@ -48,9 +51,6 @@ $(function () {
 					bool = false;
 				}
 				drawToCanvas();
-				mask.onload = function () {
-					contextUp.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
-				}
 			}
 			status++;
 		}
