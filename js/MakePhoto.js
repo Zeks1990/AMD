@@ -28,19 +28,23 @@ $(function () {
 			img = new Image;
 			img.src = this.result
 			mask = new Image;
+			mask.setAttribute('crossOrigin', 'anonymous');// 解决跨域
 			mask.src = "../img/20170429143008.png?v=12";
 			img.onload = function () {
 				drawX = 0;
 				drawY = 0;
-				temp = 0;
+				tempX = 0;
+				tempY = 0;
 				//自适应画布宽高
 				if (img.height > img.width) {
 					img.height *= MAX_WIDTH / img.width;
 					img.width = MAX_WIDTH;
+					drawY = tempY = (MAX_HEIGHT - img.height) / 2;
 					bool = true;
 				} else {
 					img.width *= MAX_HEIGHT / img.height;
 					img.height = MAX_HEIGHT;
+					drawX = tempX = (MAX_WIDTH - img.width) / 2;
 					bool = false;
 				}
 				drawToCanvas();
@@ -106,7 +110,7 @@ $(function () {
 		context.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
 		contextUp.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
 		context.drawImage(img, drawX, drawY, img.width, img.height);
-		contextUp.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
+		context.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
 		/*下载方案一*/
 		var dom = document.createElement("a");
 		dom.href = canvas.toDataURL('image/png');
@@ -114,26 +118,47 @@ $(function () {
 		dom.click();
 
 		/**下载方案二**/
-		// var type = 'png';  
-		// var imgData = canvas.toDataURL(type);
-		// var _fixType = function(type) {  
-		//     type = type.toLowerCase().replace(/jpg/i, 'jpeg');  
-		//     var r = type.match(/png|jpeg|bmp|gif/)[0];  
-		//     return 'image/' + r;// 加工image data，替换mime type  
-		// 	imgData = imgData.replace(_fixType(type),'image/octet-stream');
-		// }
-		// var saveFile = function(data, filename){  
-		//     var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');  
-		//     save_link.href = data;  
-		//     save_link.download = filename;  
+		/*var type = 'png';  
+		var imgData = canvas.toDataURL(type);
+		var _fixType = function(type) {  
+		    type = type.toLowerCase().replace(/jpg/i, 'jpeg');  
+		    var r = type.match(/png|jpeg|bmp|gif/)[0];  
+		    return 'image/' + r;// 加工image data，替换mime type  
+			imgData = imgData.replace(_fixType(type),'image/octet-stream');
+		}
+		var saveFile = function(data, filename){  
+		    var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');  
+		    save_link.href = data;  
+		    save_link.download = filename;  
 		    
-		//     var event = document.createEvent('MouseEvents');  
-		//     event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);  
-		//     save_link.dispatchEvent(event);  
-		// };  
-		// // 下载后的问题名  
-		// var filename = 'baidufe_' + (new Date()).getTime() + '.' + type;  
-		// // download  
-		// saveFile(imgData,filename);
+		    var event = document.createEvent('MouseEvents');  
+		    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);  
+		    save_link.dispatchEvent(event);
+		};  
+		// 下载后的问题名  
+		var filename = 'RX500_pic' + new Date().getTime() + '.' + type;  
+		// download  
+		saveFile(imgData,filename);*/
 	}
+
+	/***********IE下载***********/
+
+	document.getElementById('saveButton').addEventListener('click', IECanvasToImage, false);
+    /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+    function IECanvasToImage(evt) {
+		context.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+		contextUp.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+		context.drawImage(img, drawX, drawY, img.width, img.height);
+		context.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
+	    evt.preventDefault(); // Do not refresh the page when the Submit button is clicked.
+	    window.BlobBuilder = window.BlobBuilder || window.MSBlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+	    canvas.toBlob = canvas.toBlob || canvas.msToBlob;      
+	    window.navigator.saveBlob = window.navigator.saveBlob || window.navigator.msSaveBlob;
+	    if (window.BlobBuilder && canvas.toBlob && window.navigator.saveBlob) {
+	    	var filename = 'RX500_pic' + new Date().getTime() + ".png";
+	    	var blobBuilderObject = new BlobBuilder(); // Create a blob builder object so that we can append content to it.
+	    	blobBuilderObject.append( canvas.toBlob() ); // Append the user's drawing in PNG format to the builder object.
+	    	window.navigator.saveBlob(blobBuilderObject.getBlob(), filename); // Move the builder object content to a blob and save it to a file.      
+	    }
+    }
 });
