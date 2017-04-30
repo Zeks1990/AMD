@@ -9,8 +9,12 @@
 	<script src="../js/MakePhoto.js"></script>
 </head>
 <body>
-	<canvas id="makePhotoCanvas" height="300" height="300"></canvas>
-	<input type="file" accept="image/*" id="uploadPhoto">
+	<div style="text-align:center;">
+		<input type="file" accept="image/*" id="uploadPhoto" name="uploadPhoto">
+		<label for="uploadPhoto" class="inputLabel">点我上传！</label>
+	</div>
+	<canvas id="makePhotoCanvas" class="canvas1" height="300" width="300"></canvas>
+	<canvas id="upper" class="canvas1 canvas2" height="300" width="300"></canvas>
 	<div id="downLoadImg" class="downLoadBtn">点我下载！</div>
 </body>
 </html>

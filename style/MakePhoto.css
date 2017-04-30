@@ -1,9 +1,29 @@
-#makePhotoCanvas{
-	border:1px solid red;
+html,body{
+	height:100%;
+	margin:0;
+	padding:0;
 }
 .downLoadBtn{
 	height:200px;
 	width:200px;
 	background-color:red;
 	color:#fff;
+}
+.canvas1{
+	position:absolute;
+	top:50px;
+	left:50%;
+	transform: translateX(-50%);
+	border:1px solid red;
+	cursor:none;
+	user-select:none;
+}
+.canvas2{
+	cursor: move;
+}
+.inputLabel{
+	width:200px;
+}
+#uploadPhoto{
+	display:none;
 }
