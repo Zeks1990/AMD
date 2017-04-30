@@ -24,35 +24,39 @@ $(function () {
 		var reader = new FileReader();
 		reader.readAsDataURL(file);// 转化成base64数据类型
 		reader.onload = function (e) {
-			// drawToCanvas(this.result);
 			img = new Image;
 			img.src = this.result
-			mask = new Image;
-			//mask.setAttribute('crossOrigin', 'anonymous');// 解决跨域
-			mask.src = "../img/20170429143008.png?v=12";
 			img.onload = function () {
-				mask.onload = function () {
-					drawX = 0;
-					drawY = 0;
-					tempX = 0;
-					tempY = 0;
-					//自适应画布宽高
-					if (img.height > img.width) {
-						img.height *= MAX_WIDTH / img.width;
-						img.width = MAX_WIDTH;
-						drawY = tempY = (MAX_HEIGHT - img.height) / 2;
-						bool = true;
-					} else {
-						img.width *= MAX_HEIGHT / img.height;
-						img.height = MAX_HEIGHT;
-						drawX = tempX = (MAX_WIDTH - img.width) / 2;
-						bool = false;
+				drawX = 0;
+				drawY = 0;
+				tempX = 0;
+				tempY = 0;
+				//自适应画布宽高
+				if (img.height > img.width) {
+					img.height *= MAX_WIDTH / img.width;
+					img.width = MAX_WIDTH;
+					drawY = tempY = (MAX_HEIGHT - img.height) / 2;
+					bool = true;
+				} else {
+					img.width *= MAX_HEIGHT / img.height;
+					img.height = MAX_HEIGHT;
+					drawX = tempX = (MAX_WIDTH - img.width) / 2;
+					bool = false;
+				}
+				if (status == 0){//解决mask和img onload时间不同的问题
+					mask = new Image;
+					//mask.setAttribute('crossOrigin', 'anonymous');// 解决跨域
+					mask.src = "../img/20170429143008.png?v=12";
+					mask.onload = function () {
+						contextUp.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
+						drawToCanvas();
+						status++;
 					}
+				} else {
 					drawToCanvas();
-					contextUp.drawImage(mask, 0, 0, MAX_WIDTH, MAX_HEIGHT);
+					status++;
 				}
 			}
-			status++;
 		}
 	}
 	//画出图片在canvas上
@@ -66,16 +70,16 @@ $(function () {
 
 		// strDataURL = canvas.toDataURL();// 获取canvas base64数据
 	}
-	//拖动图片逻辑
-	$(canvasUp).on('mousedown touchstart', function (e) {
+	//拖动图片逻辑（无需兼容移动端）
+	$(canvasUp).on('mousedown', function (e) {// touchstart
 		if (status > 0) {
-			downX = e.clientX || e.targetTouches[0].clientX;
-			downY = e.clientY || e.targetTouches[0].clientY;
+			downX = e.clientX;//  || e.targetTouches[0].clientX
+			downY = e.clientY;//  || e.targetTouches[0].clientY
 			tempX = drawX;
 			tempY = drawY;
-			$('body').on('mousemove touchmove', function (e) {
-				moveX = e.clientX || e.targetTouches[0].clientX;
-				moveY = e.clientY || e.targetTouches[0].clientY;
+			$('body').on('mousemove', function (e) {// touchmove
+				moveX = e.clientX;// || e.targetTouches[0].clientX 
+				moveY = e.clientY;// || e.targetTouches[0].clientY 
 				/*if (!bool) {
 					if (-(downX - moveX) + tempX <= MAX_WIDTH - img.width) {
 						drawX = MAX_WIDTH - img.width;
@@ -100,8 +104,8 @@ $(function () {
 				drawY = bool == true ? -(downY - moveY) + tempY <= MAX_HEIGHT - img.height ? drawY = MAX_HEIGHT - img.height : -(downY - moveY) + tempY >= 0 ? drawY = 0 : drawY = -(downY - moveY) + tempY : drawY;
 				drawToCanvas();
 			});
-			$('body').one('mouseup touchend', function (e) {
-				$('body').off('mousemove touchmove');
+			$('body').one('mouseup', function (e) {// touchend
+				$('body').off('mousemove');// touchmove
 			});
 		}
 	});
