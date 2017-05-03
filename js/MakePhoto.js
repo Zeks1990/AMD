@@ -169,7 +169,7 @@ $(function () {
 	    }
     }
 
-    /***判断浏览器***/
+    /*******判断浏览器*******/
 	function getBrowser (getVersion) {
 		var ua_str = navigator.userAgent.toLowerCase(), ie_Tridents, trident, match_str, ie_aer_rv, browser_chi_Type;
 		//判断IE 浏览器
